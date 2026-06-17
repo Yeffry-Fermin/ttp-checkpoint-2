@@ -31,7 +31,7 @@ const players = [
 ]
 
 function SectionA() {
-  // A1.
+  // A1. Complete
   // Use .map() to render each player as a <li> inside the <ul> below.
   // Each item should display the player's name and score.
   // Each <li> needs a 'key' prop — use the player's id.
@@ -47,19 +47,25 @@ function SectionA() {
   // EXPLAIN: Why does React require a key prop on each list item?
   //          What happens if two items share the same key?
   //
-  //          answer:
+  //          answer:React requires it to keep track of the rendered lists for when they get modified
 
+  const playerAbove30 = players.filter((player) => player.score > 30)
   return (
     <div>
       <h2>Section A — Rendering a List</h2>
       <h3>All Players</h3>
       <ul>
-        {/* A1: map players here: */}
-
+        {players.map((player) => {
+          return (
+            <li key={player.id}>Name: {player.name} : Score: {player.score}</li>
+          )
+        })}
       </ul>
 
-      {/* A2: filtered list goes here: */}
-
+      <h3>Score above 30</h3>
+      <ul>
+        {playerAbove30.map((player) => <li key={player.id}>Name: {player.name} : Score: {player.score}</li>)}
+      </ul>
     </div>
   )
 }
@@ -79,7 +85,9 @@ function SectionA() {
 // It should accept props and display a player's name and score inside a <div>.
 //
 // Write PlayerRow here:
-
+const PlayerRow = ({name, score}) => {
+  return <div>Name: {name} : Score: {score}</div>
+} 
 
 
 function SectionB() {
@@ -94,13 +102,16 @@ function SectionB() {
   // EXPLAIN: What is the advantage of rendering a component inside .map()
   //          compared to mapping to a plain HTML element like <li>?
   //
-  //          answer:
+  //          answer: The advantages are code reusability, ease of use and easier to maintain as opposed to mapping plain html elements.
 
   return (
     <div>
       <h2>Section B — Lists and Components</h2>
-      {/* B2: map PlayerRow components here */}
-
+      <ul>
+        {players.map((player) => {
+          return <PlayerRow name={player.name} score={player.score} key={player.id}/>
+        })}
+      </ul>
     </div>
   )
 }
