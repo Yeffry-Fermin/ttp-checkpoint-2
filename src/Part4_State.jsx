@@ -50,24 +50,29 @@ function Counter() {
   // Why: useState gives you two things — the current value, and a function
   //      to update it. When you call the update function, React re-renders
   //      the component and shows the new value on the page.
-
+  const [count, setCount] = useState(0)
   // A2.
   // Add a button that says "Add 1".
   // When clicked, it should increase count by 1.
-
+  const addOne = () => {
+    setCount(count + 1)
+  }
   // A3.
   // Add a second button that says "Reset".
   // When clicked, it should set count back to 0.
   //
   // Test it: click "Add 1" several times, then click "Reset".
-
+  const resetCount = () => {
+    setCount(0)
+  }
   return (
     <div>
       {/* A1: remove the hardcoded 0 with the state */}
-      <h3>Count: 0</h3>
+      <h3>Count: {count}</h3>
       {/* A2: Add 1 button */}
-
+      <button onClick={addOne}>Add +1</button>
       {/* A3: Reset button */}
+      <button onClick={resetCount}>Reset</button>
 
     </div>
   )
@@ -78,7 +83,8 @@ function SectionA() {
   //          How is a state variable different from a regular variable?
   //          What happens on the page when you call the updater function?
   //
-  //          answer:
+  //          answer: State is a react hook that is very similar to a a variable. Its different from a variable in that it 
+  //          when state is updated, react triggers a re-render of the page. When you update the updater function, if its sucessful you get a re-render of the page
 
   return (
     <div>
@@ -104,7 +110,7 @@ function MoodPicker() {
   // B1.
   // Declare a state variable called mood with an initial value of your choice
   // (a string, like "neutral").
-
+  const [mood, setMood] = useState('')
   // B2.
   // Add three buttons: "Happy", "Sad", and "Excited".
   // Each button needs its own click handler that sets mood to that
@@ -122,14 +128,19 @@ function MoodPicker() {
   // EXPLAIN: How can three different buttons all update the same state variable?
   //          What is actually different between this component and Counter?
   //
-  //          answer:
+  //          answer:They can all update the same state variable because we use the same setter function. The counter component had
+  //          multiple functions to handle click events, this component you can make ur updates without needing them
+  //          
+
 
   return (
     <div>
       {/* B2: three buttons go here */}
-
+      <button onClick={() => setMood('Happy')}>Happy</button>
+      <button onClick={() => setMood('Sad')}>Sad</button>
+      <button onClick={() => setMood('Excited')}>Excited</button>
       {/* B3: mood display goes here */}
-
+      <p>Current mood: {mood}</p>
     </div>
   )
 }
@@ -158,7 +169,7 @@ function SectionB() {
 function NameInput() {
   // C1.
   // Declare a state variable called inputValue. Choose an appropriate initial value.
-
+  const [inputValue, setInputValue] = useState('')
   // C2.
   // Add an input element.
   // Wire it up so that every keystroke updates the state variable.
@@ -176,14 +187,14 @@ function NameInput() {
   // EXPLAIN: What is a controlled input?
   //          What would happen if the input's displayed value did not come from state?
   //
-  //          answer:
+  //          answer:Honestly no idea to either of these questions
 
   return (
     <div>
       {/* C2: input goes here */}
-
+      <input type='text' onChange={(e) => setInputValue(e.target.value)}/>
       {/* C3: display text goes here */}
-
+      <p>{inputValue}</p>
     </div>
   )
 }
@@ -211,7 +222,7 @@ function SectionC() {
 function Toggle() {
   // D1.
   // Declare a state variable called isVisible with an initial value of false.
-
+  const [isVisible, setIsVisible] = useState(false)
   // D2.
   // Add a button that toggles isVisible between true and false when clicked.
   // The button label should change based on the current state —
@@ -236,14 +247,15 @@ function Toggle() {
   //          What is the difference between && and a ternary?
   //          When would you use one over the other?
   //
-  //          answer:
+  //          answer: The && checks if the whole expression evals to true.
+  //          The tenary operator allows you to return jsx if true or false, && only evaluates
 
   return (
     <div>
       {/* D2: button goes here */}
-
+      <button onClick={() => setIsVisible(!isVisible)}>Toggle Visibility</button>
       {/* D3 / D4: conditional message goes here */}
-
+      <p>{isVisible ? "Now you see me" : "I am hidden"}</p>
     </div>
   )
 }
@@ -269,15 +281,15 @@ function SectionD() {
 //   function passed down the same way.
 // ------------------------------------------------------------
 
-function LightSwitchButton(/* E3: accept a prop here */) {
+function LightSwitchButton({toggle}) {
   // E3.
-  // This component should accept one prop — a function.
+  // This component should accept o{toggle} — a function.
   // Render a single button. When clicked, it should call that function.
   // Do not declare any state in this component — it doesn't need any.
 
   return (
     <div>
-      {/* E3: button goes here */}
+      <button onClick={toggle}>Toggle Light</button>
 
     </div>
   )
@@ -286,10 +298,12 @@ function LightSwitchButton(/* E3: accept a prop here */) {
 function LightSwitch() {
   // E1.
   // Declare a state variable called isOn with an initial value of false.
-
+  const [isOn, setIsOn] = useState(false)
   // E2.
   // Write a function that flips isOn to the opposite value.
-
+  const toggleOn = () => {
+    setIsOn(!isOn)
+  }
   // E4.
   // Render LightSwitchButton below, passing your flip function from E2
   // to it as a prop.
@@ -304,13 +318,15 @@ function LightSwitch() {
   //          or number as a prop? What's different about it?
   //          Why doesn't LightSwitchButton need its own state to make this work?
   //
-  //          answer:
+  //          answer: Props are just variables, so you can pass them as such they are similar. 
+  //          the difference is. The buttond doesnt need its own state because the parent component handles it. 
 
   return (
     <div>
       {/* E5: on/off sentence goes here */}
-
+      <p>The light switch is {isOn ? "On" : "Off"}</p>
       {/* E4: LightSwitchButton goes here */}
+      <LightSwitchButton toggle={toggleOn} />
 
     </div>
   )
@@ -339,7 +355,8 @@ function GreetingForm() {
   // F1.
   // Declare a state variable called nameInput, starting as an empty string.
   // Declare a second state variable called greeting, starting as an empty string.
-
+  const [nameInput, setNameInput] = useState('')
+  const [greeting, setGreeting] = useState('')
   // F2.
   // Add a <form> containing a controlled text input wired to nameInput,
   // and a submit button.
@@ -366,14 +383,20 @@ function GreetingForm() {
   // EXPLAIN: What happens if you submit a form without calling preventDefault()?
   //          Why does that matter for a component that holds state?
   //
-  //          answer:
-
+  //          answer: Submitting a form without prevendingDefault will cause the page to refresh.
+  //          It matters because the page refresh will most likely clear the state value
+  
+  function handleSubmit (e) {
+    e.preventDefault()
+  }
   return (
     <div>
       {/* F2: form goes here */}
-
+      <form action="" onSubmit={handleSubmit}>
+        <input type="text" value={nameInput} onChange={(e) => setNameInput(e.target.value)}/>
+      </form>
       {/* F5: greeting goes here */}
-
+      <div>Hello, {nameInput}</div>
     </div>
   )
 }
@@ -403,7 +426,7 @@ function SnackList() {
   // G1.
   // Declare a state variable called snacks, an array starting with two
   // or three snack name strings of your choice.
-
+  const [snacks, setSnacks] = useState(['cookies', 'chips', 'protein bar'])
   // G2.
   // Add a button labeled "Add Pretzels". When clicked, it should add the
   // string "Pretzels" to the snacks array — without mutating the original
@@ -426,14 +449,17 @@ function SnackList() {
   //          state? What do the spread operator and .filter() let you do
   //          instead?
   //
-  //          answer:
+  //          answer: State is immutable so using the methods is not allowed as they mutate data. Spread operator and filter do not mutate the array so its allowed.
 
+  function addPretzels () {
+    setSnacks([...snacks, 'pretzels'])
+  }
   return (
     <div>
       {/* G2: Add Pretzels button goes here */}
-
+      <button onClick={addPretzels}>Add Pretzels</button>
       {/* G3 / G4: snack list or empty message goes here */}
-
+      {snacks.length === 0 ? "No snacks left" : snacks.map((snack) => <div>{snack}</div>)}
     </div>
   )
 }
